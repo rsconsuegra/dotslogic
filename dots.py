@@ -16,7 +16,7 @@ class RC(object):
         self.column3 = [False] * 6
         self.column4 = [False] * 6
         self.column5 = [False] * 6
-
+                       
 class Board(object):
     def __init__(self, data):
         self.data = data
@@ -75,8 +75,14 @@ def make_a_move(data,d,dn,pos):
       
     return update_board(data)
 
+def is_valid_move(data,d,dn,pos):
+    if(d=='r'):
+        direction=getattr(data,'row'+str(dn))
+        return not direction[pos-1]
+    else:
+        direction=getattr(data,'column'+str(dn))
+        return not direction[pos-1] 
 
-    
 #data = RC()
 #board = create_board(data)
 #print (board.gameboard)
