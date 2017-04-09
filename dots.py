@@ -58,13 +58,26 @@ def create_board(*state):
         return Board(data)
     
 def update_board(state):
+    print('Change')
     return Board(state)
 
-    
+
+def make_a_move(d,dn,pos):
+    data = RC()
+    if(d=='r'):
+        direction=getattr(data,'row'+str(dn))
+        direction[pos-1]=True
+        setattr(data, 'row'+str(dn), direction)   
+    else:
+        direction=getattr(data,'column'+str(dn))
+        direction[pos-1]=True
+        setattr(data, 'column'+str(dn), direction)  
+        
+      
+    return update_board(data)
+             
 data = RC()
 board = create_board(data)
 print (board.gameboard)
-data.column1[2]=True
-data.row2[3]=True        
-board = update_board(data)
+board=make_a_move('r',1,3)    
 print (board.gameboard)
