@@ -36,22 +36,38 @@ def numthree(gameboard):
     return almost 
 
 ""
-def alphaBeta(self, board, alpha, beta, deep):
+def alphaBeta(data, board, alpha, beta, deep):
         """ Implements a minimax algorithm with alpha-beta pruning. """
         if deep == 0:
-            return self.positionEvaluation(board, player)
+            return heuristic_value1(board, data)
+        
+        datacopy=copy.deepcopy(data)
+        boardcopy=copy.deepcopy(board)
+        for i in range(1,6):
+                for j in range(1,7):
+                    if(dots.is_valid_move(datacopy,'r',i,j)):
+                        board =dots.make_a_move(datacopy,'r',i,j)
+                        current_eval = -alphaBeta(data, board.gameboard, float('-infinity'), alpha, deep - 1)
+                        datacopy=copy.deepcopy(data)
 
-        move_list = board.generateMoves(rules, player)
-        for move in move_list:
-            board.makeMove(move, player)
-            current_eval = -self.alphaBeta(board, rules, -beta, -alpha, deep - 1)
-            board.unmakeMove(move, player)
+                        if current_eval >= beta:
+                            return beta
+            
+                        if current_eval > alpha:
+                            alpha = current_eval
+                            
+        for i in range(1,6):
+            for j in range(1,7):
+                if(dots.is_valid_move(datacopy,'r',i,j)):
+                    board =dots.make_a_move(datacopy,'r',i,j)
+                    current_eval = -alphaBeta(data, board.gameboard, float('-infinity'), alpha, deep - 1)
+                    datacopy=copy.deepcopy(data)
 
-            if current_eval >= beta:
-                return beta
-
-            if current_eval > alpha:
-                alpha = current_eval
+                    if current_eval >= beta:
+                        return beta
+        
+                    if current_eval > alpha:
+                        alpha = current_eval
 
         return alpha
 
@@ -67,13 +83,23 @@ def rootAlphaBeta(board, data, deep):
         for j in range(1,7):
             if(dots.is_valid_move(datacopy,'r',i,j)):
                 board =dots.make_a_move(datacopy,'r',i,j)
-                alpha = -alphaBeta(board, rules, float('-infinity'), alpha, deep - 1, board.getOtherPlayer(player))
-                board.unmakeMove(move, player)
+                alpha = -alphaBeta(data, board.gameboard, float('-infinity'), alpha, deep - 1)
+                datacopy=copy.deepcopy(data)
     
                 if alpha > max_eval:
                     max_eval = alpha
-                    best_move = move
-
+                    best_move = ['r',i,j]
+                    
+    for i in range(1,6):
+        for j in range(1,7):
+            if(dots.is_valid_move(datacopy,'c',i,j)):
+                board =dots.make_a_move(datacopy,'c',i,j)
+                alpha = -alphaBeta(data, board.gameboard, float('-infinity'), alpha, deep - 1)
+                datacopy=copy.deepcopy(data)
+    
+                if alpha > max_eval:
+                    max_eval = alpha
+                    best_move = ['c',i,j]
     return best_move
 ""
 """ def alpha_beta_prunning1(datas,gameboard):
@@ -101,11 +127,12 @@ def rootAlphaBeta(board, data, deep):
 def first_approach(datas,gameboard):
     boardcopy=copy.deepcopy(gameboard)
     num3=numthree(gameboard)
-    while True:
+    i=0
+    cont=0
+    while 20:
         a=randint(1,5)
         b=randint(1,6)
         c=randint(0,1)
-        cont=0
         if(len(num3)>0):
             datacopy=copy.deepcopy(datas)
             if(gameboard[num3[0]].index(False)<2):
@@ -159,6 +186,7 @@ board = dots.create_board(rcs)
 board =dots.make_a_move(rcs,'r',1,1)
 board =dots.make_a_move(rcs,'r',1,2)
 board =dots.make_a_move(rcs,'c',1,1)
-board =dots.make_a_move(rcs,'c',1,3)
+board =dots.make_a_move(rcs,'c',1,2)
 print(board_available(board.gameboard))
 print(first_approach(rcs,board.gameboard))
+print(rootAlphaBeta(board.gameboard, rcs,2))
