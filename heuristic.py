@@ -36,7 +36,7 @@ def numthree(gameboard):
     return almost 
 
 ""
-def alphaBeta(self, board, alpha, beta, deep, player):
+def alphaBeta(self, board, alpha, beta, deep):
         """ Implements a minimax algorithm with alpha-beta pruning. """
         if deep == 0:
             return self.positionEvaluation(board, player)
@@ -44,7 +44,7 @@ def alphaBeta(self, board, alpha, beta, deep, player):
         move_list = board.generateMoves(rules, player)
         for move in move_list:
             board.makeMove(move, player)
-            current_eval = -self.alphaBeta(board, rules, -beta, -alpha, deep - 1, player+1)
+            current_eval = -self.alphaBeta(board, rules, -beta, -alpha, deep - 1)
             board.unmakeMove(move, player)
 
             if current_eval >= beta:
@@ -55,21 +55,24 @@ def alphaBeta(self, board, alpha, beta, deep, player):
 
         return alpha
 
-def rootAlphaBeta(self, board, rules, deep, player):
+def rootAlphaBeta(board, data, deep):
     """ Makes a call to the alphaBeta function. Returns the optimal move for a player at given deep. """
     best_move = None
     max_eval = float('-infinity')
+    datacopy=copy.deepcopy(data)
+    boardcopy=copy.deepcopy(board)
 
-    move_list = board.generateMoves(rules, player)
     alpha = float('infinity')
-    for move in move_list:
-        board.makeMove(move, player)
-        alpha = -self.alphaBeta(board, rules, float('-infinity'), alpha, deep - 1, board.getOtherPlayer(player))
-        board.unmakeMove(move, player)
-
-        if alpha > max_eval:
-            max_eval = alpha
-            best_move = move
+    for i in range(1,6):
+        for j in range(1,7):
+            if(dots.is_valid_move(datacopy,'r',i,j)):
+                board =dots.make_a_move(datacopy,'r',i,j)
+                alpha = -alphaBeta(board, rules, float('-infinity'), alpha, deep - 1, board.getOtherPlayer(player))
+                board.unmakeMove(move, player)
+    
+                if alpha > max_eval:
+                    max_eval = alpha
+                    best_move = move
 
     return best_move
 ""
@@ -102,6 +105,7 @@ def first_approach(datas,gameboard):
         a=randint(1,5)
         b=randint(1,6)
         c=randint(0,1)
+        cont=0
         if(len(num3)>0):
             datacopy=copy.deepcopy(datas)
             if(gameboard[num3[0]].index(False)<2):
@@ -119,7 +123,8 @@ def first_approach(datas,gameboard):
             datacopy=copy.deepcopy(datas)
             if(dots.is_valid_move(datacopy,'r',a,b)):
                 board =dots.make_a_move(datacopy,'r',a,b)
-                if(len(numthree(board.gameboard))>len(num3)):
+                if(len(numthree(board.gameboard))>len(num3) and cont<15):
+                    cont=cont+1;
                     continue
                 move=['r',a,b]
                 break
@@ -127,7 +132,8 @@ def first_approach(datas,gameboard):
             datacopy=copy.deepcopy(datas)
             if(dots.is_valid_move(datacopy,'c',a,b)):
                 board =dots.make_a_move(datacopy,'c',a,b)
-                if(len(numthree(board.gameboard))>len(num3)):
+                if(len(numthree(board.gameboard))>len(num3) and cont<15):
+                    cont=cont+1;
                     continue
                 move=['c',a,b]
                 break
@@ -142,7 +148,7 @@ def heuristic_value1(gameboard,datas):
         k=100
     c=10
     h=[x*c for x in states]
-    return ((1/sum(h))/board_available(gameboard)+k)
+    return (1/(sum(h)/board_available(gameboard))+k)
     
 import dots
 import copy
