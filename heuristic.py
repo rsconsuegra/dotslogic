@@ -35,6 +35,44 @@ def numthree(gameboard):
     almost =[i for i,v in enumerate(states) if v == 3]
     return almost 
 
+""
+def alphaBeta(self, board, alpha, beta, deep, player):
+        """ Implements a minimax algorithm with alpha-beta pruning. """
+        if deep == 0:
+            return self.positionEvaluation(board, player)
+
+        move_list = board.generateMoves(rules, player)
+        for move in move_list:
+            board.makeMove(move, player)
+            current_eval = -self.alphaBeta(board, rules, -beta, -alpha, deep - 1, player+1)
+            board.unmakeMove(move, player)
+
+            if current_eval >= beta:
+                return beta
+
+            if current_eval > alpha:
+                alpha = current_eval
+
+        return alpha
+
+def rootAlphaBeta(self, board, rules, deep, player):
+    """ Makes a call to the alphaBeta function. Returns the optimal move for a player at given deep. """
+    best_move = None
+    max_eval = float('-infinity')
+
+    move_list = board.generateMoves(rules, player)
+    alpha = float('infinity')
+    for move in move_list:
+        board.makeMove(move, player)
+        alpha = -self.alphaBeta(board, rules, float('-infinity'), alpha, deep - 1, board.getOtherPlayer(player))
+        board.unmakeMove(move, player)
+
+        if alpha > max_eval:
+            max_eval = alpha
+            best_move = move
+
+    return best_move
+""
 """ def alpha_beta_prunning1(datas,gameboard):
     datacopy=copy.deepcopy(datas)
     boardcopy=copy.deepcopy(gameboard)
@@ -102,9 +140,9 @@ def heuristic_value1(gameboard,datas):
     k=0
     if(len(count_filled_boxes(gameboard))>0):
         k=100
-    c=available_moves(datas)
+    c=10
     h=[x*c for x in states]
-    return sum(h)/board_available(gameboard)+k
+    return ((1/sum(h))/board_available(gameboard)+k)
     
 import dots
 import copy
