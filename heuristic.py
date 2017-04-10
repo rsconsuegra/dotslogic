@@ -32,7 +32,7 @@ def board_states(gameboard):
     
 
 
-def alpha_beta_prunning1(datas,gameboard):
+""" def alpha_beta_prunning1(datas,gameboard):
     datacopy=copy.deepcopy(datas)
     boardcopy=copy.deepcopy(gameboard)
     heuristic_values=[]
@@ -41,13 +41,46 @@ def alpha_beta_prunning1(datas,gameboard):
         for j in range(1,7):
             if(dots.is_valid_move(datacopy,'r',i,j)):
                 board =dots.make_a_move(datacopy,'r',i,j)
-                print(datacopy.row1)
                 heuristic_values.append(heuristic_value1(board.gameboard,datacopy))
+                moves.append(['r',i,j])
             datacopy=copy.deepcopy(datas)
-            print(datacopy.row1)
+    for i in range(1,6):
+        for j in range(1,7):
+            if(dots.is_valid_move(datacopy,'c',i,j)):
+                board =dots.make_a_move(datacopy,'c',i,j)
+                heuristic_values.append(heuristic_value1(board.gameboard,datacopy))
+                moves.append(['c',i,j])
+            datacopy=copy.deepcopy(datas)
             
-    return heuristic_values
+    return heuristic_values"""
             
+def first_approach(datas,gameboard):
+    print(gameboard)
+    datacopy=copy.deepcopy(datas)
+    print(datacopy.row1)
+    boardcopy=copy.deepcopy(gameboard)
+    
+    while True:
+        a=randint(1,5)
+        b=randint(1,6)
+        c=randint(0,1)
+        if(c==0):
+            if(dots.is_valid_move(datacopy,'r',a,b)):
+                board =dots.make_a_move(datacopy,'r',a,b)
+                print(board.gameboard)
+                print(board_available(board.gameboard))
+                heuristic_value=(heuristic_value1(board.gameboard,datacopy))
+                move=['r',a,b]
+                break
+        else:
+            if(dots.is_valid_move(datacopy,'c',a,b)):
+                board =dots.make_a_move(datacopy,'c',a,b)
+                heuristic_value=(heuristic_value1(board.gameboard,datacopy))
+                move=['c',a,b]
+                break
+                
+    datacopy=copy.deepcopy(datas)    
+    return move
     
 def heuristic_value1(gameboard,datas):
     states=board_states(gameboard)
@@ -60,6 +93,7 @@ def heuristic_value1(gameboard,datas):
     
 import dots
 import copy
+from random import randint
 
 rcs=dots.RC();
 board = dots.create_board(rcs)          
@@ -67,8 +101,5 @@ board =dots.make_a_move(rcs,'r',1,3)
 board =dots.make_a_move(rcs,'r',1,2)
 board =dots.make_a_move(rcs,'c',1,1)
 board =dots.make_a_move(rcs,'c',1,2)
-print(board.gameboard)
 print(board_available(board.gameboard))
-print(available_moves(rcs))
-print(rcs.row1)
-print(alpha_beta_prunning1(rcs,board.gameboard))
+print(first_approach(rcs,board.gameboard))
