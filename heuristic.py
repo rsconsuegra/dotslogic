@@ -64,11 +64,24 @@ def first_approach(datas,gameboard):
         a=randint(1,5)
         b=randint(1,6)
         c=randint(0,1)
+        if(len(num3)>0):
+            datacopy=copy.deepcopy(datas)
+            if(gameboard[num3[0]].index(False)<2):
+                d='r'
+                board=dots.make_a_move(datacopy,d,num3[0]//5+1,num3[0]%5+gameboard[num3[0]].index(False)+1)
+                move=['r',num3[0]//5+1,num3[0]%5+gameboard[num3[0]].index(False)+1]
+                break
+            else:
+                d='c'
+                board=dots.make_a_move(datacopy,d,num3[0]%5+1,num3[0]//5+gameboard[num3[0]].index(False)-1)
+                move=['c',num3[0]%5+1,num3[0]//5+gameboard[num3[0]].index(False)-1]
+                break
+            
         if(c==0):
             datacopy=copy.deepcopy(datas)
             if(dots.is_valid_move(datacopy,'r',a,b)):
                 board =dots.make_a_move(datacopy,'r',a,b)
-                if(numthree(board.gameboard)>num3):
+                if(len(numthree(board.gameboard))>len(num3)):
                     continue
                 move=['r',a,b]
                 break
@@ -76,7 +89,7 @@ def first_approach(datas,gameboard):
             datacopy=copy.deepcopy(datas)
             if(dots.is_valid_move(datacopy,'c',a,b)):
                 board =dots.make_a_move(datacopy,'c',a,b)
-                if(numthree(board.gameboard)>num3):
+                if(len(numthree(board.gameboard))>len(num3)):
                     continue
                 move=['c',a,b]
                 break
@@ -99,9 +112,9 @@ from random import randint
 
 rcs=dots.RC();
 board = dots.create_board(rcs)          
-board =dots.make_a_move(rcs,'r',1,3)
+board =dots.make_a_move(rcs,'r',1,1)
 board =dots.make_a_move(rcs,'r',1,2)
 board =dots.make_a_move(rcs,'c',1,1)
-board =dots.make_a_move(rcs,'c',1,2)
+board =dots.make_a_move(rcs,'c',1,3)
 print(board_available(board.gameboard))
 print(first_approach(rcs,board.gameboard))
