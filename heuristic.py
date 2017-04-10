@@ -30,7 +30,10 @@ def board_states(gameboard):
     almost =filter(lambda x : x <=3 and x>=1 , states)
     return list(almost)
     
-
+def numthree(gameboard):
+    states=[sum(x) for x in gameboard]
+    almost =[i for i,v in enumerate(states) if v == 3]
+    return almost 
 
 """ def alpha_beta_prunning1(datas,gameboard):
     datacopy=copy.deepcopy(datas)
@@ -55,27 +58,26 @@ def board_states(gameboard):
     return heuristic_values"""
             
 def first_approach(datas,gameboard):
-    print(gameboard)
-    datacopy=copy.deepcopy(datas)
-    print(datacopy.row1)
     boardcopy=copy.deepcopy(gameboard)
-    
+    num3=numthree(gameboard)
     while True:
         a=randint(1,5)
         b=randint(1,6)
         c=randint(0,1)
         if(c==0):
+            datacopy=copy.deepcopy(datas)
             if(dots.is_valid_move(datacopy,'r',a,b)):
                 board =dots.make_a_move(datacopy,'r',a,b)
-                print(board.gameboard)
-                print(board_available(board.gameboard))
-                heuristic_value=(heuristic_value1(board.gameboard,datacopy))
+                if(numthree(board.gameboard)>num3):
+                    continue
                 move=['r',a,b]
                 break
         else:
+            datacopy=copy.deepcopy(datas)
             if(dots.is_valid_move(datacopy,'c',a,b)):
                 board =dots.make_a_move(datacopy,'c',a,b)
-                heuristic_value=(heuristic_value1(board.gameboard,datacopy))
+                if(numthree(board.gameboard)>num3):
+                    continue
                 move=['c',a,b]
                 break
                 
